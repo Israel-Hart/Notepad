@@ -28,7 +28,7 @@ public class Notepad {
         window = new JFrame("Notepad");
         menuBar = new JMenuBar();
         textArea = new JTextArea("This is test sentence.");
-        scrollPane = new JScrollPane(textArea);
+        scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         fileMenu = new JMenu("File");
         editMenu = new JMenu("Edit");
         formatMenu = new JMenu("Format");
