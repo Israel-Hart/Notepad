@@ -14,6 +14,7 @@ public class Notepad {
     private JScrollPane scrollPane;
     private JMenuBar menuBar;
     private String[] fileItems, editItems, formatItems, viewItems, helpItems;
+    private ArrayList<JSeparator> separators ;
     private char[] fileShortcuts, editShortcuts;
     private ActionListener fileMenuListener;
     Notepad() {
@@ -45,34 +46,41 @@ public class Notepad {
         editShortcuts = new char[]{'Z', 'C', 'X', 'C', 'V'};
         menuItems = new ArrayList<>();  // will be used to style menu Items
         panel = new JPanel();
+        separators = new ArrayList<>();
 
         //generate menuItems
-        for (int i = 0; i < fileItems.length; i++) {
+        for (int i = 0; i < fileItems.length; i++) {  // fileMenu
             JMenuItem item = new JMenuItem(fileItems[i]);
+            if(i == 5 || i == 7)
+            {
+                JSeparator s = new JSeparator(SwingConstants.HORIZONTAL); //Horizontal seprator
+                fileMenu.add(s); separators.add(s);
+            }
             item.addActionListener(fileMenuListener);
             fileMenu.add(item);
             menuItems.add(item);
         }
-        for (int i = 0; i < editItems.length; i++) {
+        for (int i = 0; i < editItems.length; i++) { //editMenu
             JMenuItem item = new JMenuItem(editItems[i]);
             editMenu.add(item);
             menuItems.add(item);
         }
-        for (int i = 0; i < formatItems.length; i++) {
+        for (int i = 0; i < formatItems.length; i++) { //formatMenu
             JMenuItem item = new JMenuItem(formatItems[i]);
             formatMenu.add(item);
             menuItems.add(item);
         }
-        for (int i = 0; i < viewItems.length; i++) {
+        for (int i = 0; i < viewItems.length; i++) { //viewMenu
             JMenuItem item = new JMenuItem(viewItems[i]);
             viewMenu.add(item);
             menuItems.add(item);
         }
-        for (int i = 0; i < helpItems.length; i++) {
+        for (int i = 0; i < helpItems.length; i++) { // helpMenu
             JMenuItem item = new JMenuItem(helpItems[i]);
             helpMenu.add(item);
             menuItems.add(item);
         }
+
 
         //style menus
         fileMenu.setFont(UI_font);
@@ -80,6 +88,12 @@ public class Notepad {
         formatMenu.setFont(UI_font);
         viewMenu.setFont(UI_font);
         helpMenu.setFont(UI_font);
+
+        //style separators
+        for(JSeparator sp : separators) {
+            sp.setBackground(Color.lightGray);
+        }
+        
         //style menuItems
         for (JMenuItem item : menuItems) {
             item.setFont(UI_font);
