@@ -1,13 +1,14 @@
 package com.izzey.notepad;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.*;
 public class Notepad {
     private JFrame window;
     private JPanel panel, scrollPanel;
-    private final Font UI_font  = new Font("san-serif", Font.PLAIN, 12);
+    private final Font UI_FONT  = new Font("arial", Font.PLAIN, 12);
     private JMenu fileMenu, editMenu, formatMenu, viewMenu, helpMenu;
     private ArrayList<JMenuItem> menuItems;
     private JTextArea textArea;
@@ -15,6 +16,7 @@ public class Notepad {
     private JMenuBar menuBar;
     private String[] fileItems, editItems, formatItems, viewItems, helpItems;
     private ArrayList<JSeparator> separators ;
+    private JMenu[] menus;
     private char[] fileShortcuts, editShortcuts;
     private ActionListener fileMenuListener;
     Notepad() {
@@ -46,15 +48,18 @@ public class Notepad {
         editShortcuts = new char[]{'Z', 'C', 'X', 'C', 'V'};
         menuItems = new ArrayList<>();  // will be used to style menu Items
         panel = new JPanel();
+        menus = new JMenu[]{fileMenu, editMenu, formatMenu,viewMenu,helpMenu};
         separators = new ArrayList<>();
+
 
         //generate menuItems
         for (int i = 0; i < fileItems.length; i++) {  // fileMenu
             JMenuItem item = new JMenuItem(fileItems[i]);
             if(i == 5 || i == 7)
             {
-                JSeparator s = new JSeparator(SwingConstants.HORIZONTAL); //Horizontal seprator
-                fileMenu.add(s); separators.add(s);
+                JSeparator sp = new JSeparator(SwingConstants.HORIZONTAL);
+                fileMenu.add(sp);
+                separators.add(sp);
             }
             item.addActionListener(fileMenuListener);
             fileMenu.add(item);
@@ -62,6 +67,12 @@ public class Notepad {
         }
         for (int i = 0; i < editItems.length; i++) { //editMenu
             JMenuItem item = new JMenuItem(editItems[i]);
+            if(i == 1 || i == 5 || i == 10)
+            {
+                JSeparator sp = new JSeparator(SwingConstants.HORIZONTAL);
+                editMenu.add(sp);
+                separators.add(sp);
+            }
             editMenu.add(item);
             menuItems.add(item);
         }
@@ -77,29 +88,44 @@ public class Notepad {
         }
         for (int i = 0; i < helpItems.length; i++) { // helpMenu
             JMenuItem item = new JMenuItem(helpItems[i]);
+            if(i == 3)
+            {
+                JSeparator sp = new JSeparator(SwingConstants.HORIZONTAL);
+                helpMenu.add(sp);
+                separators.add(sp);
+            }
             helpMenu.add(item);
             menuItems.add(item);
         }
-
-
+        //Menubar
+        menuBar.setBorder(BorderFactory.createEmptyBorder());
+        menuBar.setBackground(Color.white);
         //style menus
-        fileMenu.setFont(UI_font);
-        editMenu.setFont(UI_font);
-        formatMenu.setFont(UI_font);
-        viewMenu.setFont(UI_font);
-        helpMenu.setFont(UI_font);
-
-        //style separators
-        for(JSeparator sp : separators) {
-            sp.setBackground(Color.lightGray);
+        for(JMenu m : menus) {
+            m.setFont(UI_FONT);
+            JPopupMenu popup = m.getPopupMenu();
+            popup.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
         }
-        
+        //style separators
+        for(JSeparator sp : separators) { //make sure all separators can be styled
+            sp.setForeground(Color.lightGray);
+            sp.setBorder(BorderFactory.createEmptyBorder(5,0,5,0));
+            Dimension size = sp.getSize();
+            sp.setSize((int) (size.getWidth() -10), (int) size.getHeight());
+        }
         //style menuItems
         for (JMenuItem item : menuItems) {
-            item.setFont(UI_font);
+            item.setFont(UI_FONT);
+//            item.setBorder(BorderFactory.createEmptyBorder());
+            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
+            item.setFocusable(false);
         }
-            textArea.setFont(UI_font);
+            textArea.setFont(UI_FONT);
             scrollPane.setPreferredSize(new Dimension(800, 400));
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());
+            JScrollBar xBar = scrollPane.getHorizontalScrollBar(), yBar = scrollPane.getVerticalScrollBar();
+            xBar.setBorder(BorderFactory.createEmptyBorder());
+            yBar.setBorder(BorderFactory.createEmptyBorder());
 
             menuBar.add(fileMenu);
             menuBar.add(editMenu);
