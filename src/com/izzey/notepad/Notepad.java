@@ -89,7 +89,7 @@ public class Notepad {
         for (int i = 0; i < helpItems.length; i++) { // helpMenu
             JMenuItem item = new JMenuItem(helpItems[i]);
             if(i == 3)
-            {
+            {   
                 JSeparator sp = new JSeparator(SwingConstants.HORIZONTAL);
                 helpMenu.add(sp);
                 separators.add(sp);
