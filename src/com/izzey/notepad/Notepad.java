@@ -1,5 +1,7 @@
 package com.izzey.notepad;
 
+import com.izzey.notepad.fileactions.*;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
@@ -10,7 +12,7 @@ public class Notepad {
     private JPanel panel, scrollPanel;
     private final Font UI_FONT  = new Font("arial", Font.PLAIN, 12);
     private JMenu fileMenu, editMenu, formatMenu, viewMenu, helpMenu;
-    private ArrayList<JMenuItem> menuItems;
+    private ArrayList<JMenuItem> menuItems, fileMenuItems, editMenuItems, formatMenuItems, viewMenuItems, helpMenuItems;
     private JTextArea textArea;
     private JScrollPane scrollPane;
     private JMenuBar menuBar;
@@ -20,8 +22,8 @@ public class Notepad {
     private char[] fileShortcuts, editShortcuts;
     private ActionListener fileMenuListener;
     Notepad() {
-        createListeners();
         init();
+        addListeners();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.pack();
         window.setLocationRelativeTo(null);
@@ -46,7 +48,12 @@ public class Notepad {
         helpItems = new String[]{"Get Help", "Send Feedback", "About Notepad"};
         fileShortcuts = new char[]{'N', 'N', 'O', 'S', 'S','s','d','b'};
         editShortcuts = new char[]{'Z', 'C', 'X', 'C', 'V'};
-        menuItems = new ArrayList<>();  // will be used to style menu Items 
+        menuItems = new ArrayList<>();  // will be used to reference menu Items
+        fileMenuItems = new ArrayList<>();
+        editMenuItems = new ArrayList<>();
+        formatMenuItems = new ArrayList<>();
+        viewMenuItems = new ArrayList<>();
+        helpMenuItems = new ArrayList<>();
         panel = new JPanel();
         menus = new JMenu[]{fileMenu, editMenu, formatMenu,viewMenu,helpMenu};
         separators = new ArrayList<>();
@@ -62,6 +69,7 @@ public class Notepad {
                 separators.add(sp);
             }
             item.addActionListener(fileMenuListener);
+            fileMenuItems.add(item);
             fileMenu.add(item);
             menuItems.add(item);
         }
@@ -137,15 +145,16 @@ public class Notepad {
             window.add(panel);
 
         }
-    void createListeners() {
-        fileMenuListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                JMenuItem src = (JMenuItem) e.getSource();
-
-                //new file action
-
-            }
-        };
+    void addListeners() {
+        JMenuItem openItem = fileMenuItems.get(2);
+        openItem.setAction(new OpenFile(this, fileItems[2]));
+        openItem.setText(fileItems[2]); // bug fix for disappearing text on menu item after Action is set
     }
+
+    public void updateArea () {
+        textArea.revalidate();
+    }
+
+    public JFrame getFrame() { return window;};
+    public JTextArea getArea() { return textArea;}
 }
