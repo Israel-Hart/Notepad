@@ -46,7 +46,7 @@ public class Notepad {
         helpItems = new String[]{"Get Help", "Send Feedback", "About Notepad"};
         fileShortcuts = new char[]{'N', 'N', 'O', 'S', 'S','s','d','b'};
         editShortcuts = new char[]{'Z', 'C', 'X', 'C', 'V'};
-        menuItems = new ArrayList<>();  // will be used to style menu Items
+        menuItems = new ArrayList<>();  // will be used to style menu Items 
         panel = new JPanel();
         menus = new JMenu[]{fileMenu, editMenu, formatMenu,viewMenu,helpMenu};
         separators = new ArrayList<>();
