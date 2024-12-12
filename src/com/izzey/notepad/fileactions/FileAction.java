@@ -36,6 +36,7 @@ class FileAction extends AbstractAction {
             {
                 destination.append(line + "\n");
             }
+            reader.close(); 
         }
         catch(IOException e)
         {
