@@ -1,11 +1,10 @@
 package com.izzey.notepad.fileactions;
-
 import com.izzey.notepad.Notepad;
-
 import javax.swing.*;
 import java.awt.event.*;
 public class OpenFile extends FileAction {
-    public OpenFile(Notepad note, String name) {
+    public OpenFile(Notepad note, String name)
+    {
         super(note, name);
     }
 

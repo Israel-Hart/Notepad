@@ -21,6 +21,8 @@ public class Notepad {
     private JMenu[] menus;
     private char[] fileShortcuts, editShortcuts;
     private ActionListener fileMenuListener;
+
+    private boolean fileSaved;
     Notepad() {
         init();
         addListeners();
@@ -30,6 +32,7 @@ public class Notepad {
         window.setVisible(true);
     }
     void init() {
+        this.fileSaved = false;
         window = new JFrame("Notepad");
         menuBar = new JMenuBar();
         textArea = new JTextArea("This is test sentence.");
@@ -147,8 +150,20 @@ public class Notepad {
         }
     void addListeners() {
         JMenuItem openItem = fileMenuItems.get(2);
+        JMenuItem saveItem = fileMenuItems.get(3);
+        saveItem.setAction(new SaveFile(this, fileItems[3]));
+        saveItem.setText(fileItems[3]);
         openItem.setAction(new OpenFile(this, fileItems[2]));
         openItem.setText(fileItems[2]); // bug fix for disappearing text on menu item after Action is set
+
+    }
+
+    public void recordSaveOperation() {
+        fileSaved = true;
+        fileMenuItems.get(3).setEnabled(false); // disable save button
+    }
+    public boolean fileSaved(){
+        return fileSaved;
     }
 
     public void updateArea () {

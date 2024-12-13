@@ -4,6 +4,7 @@ import com.izzey.notepad.Notepad;
 import javax.swing.*;
 import java.io.*;
 import java.awt.event.*;
+import java.nio.file.Path;
 
 class FileAction extends AbstractAction {
     protected JFileChooser chooser;
@@ -14,6 +15,7 @@ class FileAction extends AbstractAction {
     protected BufferedReader reader;
     protected BufferedWriter writer;
     protected FileReader fileReader;
+
 
     FileAction(Notepad note, String name) {
         this.chooser = new JFileChooser();
@@ -36,13 +38,19 @@ class FileAction extends AbstractAction {
             {
                 destination.append(line + "\n");
             }
-            reader.close(); 
+            reader.close();
         }
         catch(IOException e)
         {
             e.printStackTrace();
         }
     }
+
+    protected void writeFile(File file, Path path)
+    {
+
+    }
+
 
     private String getActionName(){ return actionName; }
     protected void getLocation() { // returns location selected by user
