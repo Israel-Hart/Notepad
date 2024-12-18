@@ -151,20 +151,26 @@ public class Notepad {
     void addListeners() {
         JMenuItem openItem = fileMenuItems.get(2);
         JMenuItem saveItem = fileMenuItems.get(3);
-        saveItem.setAction(new SaveFile(this, fileItems[3]));
-        saveItem.setText(fileItems[3]);
+        JMenuItem saveAsItem = fileMenuItems.get(4);
+
         openItem.setAction(new OpenFile(this, fileItems[2]));
         openItem.setText(fileItems[2]); // bug fix for disappearing text on menu item after Action is set
 
+        saveItem.setAction(new SaveFile(this, fileItems[3]));
+        saveItem.setText(fileItems[3]);
+        saveAsItem.setAction(new SaveFileAs(this, fileItems[4]));
+        saveAsItem.setText(fileItems[4]);
     }
 
     public void recordSaveOperation() {
         fileSaved = true;
         fileMenuItems.get(3).setEnabled(false); // disable save button
     }
-    public boolean fileSaved(){
+    public boolean getSaveState(){
         return fileSaved;
     }
+
+    public void updateSaveState(boolean state) { fileSaved = state; }
 
     public void updateArea () {
         textArea.revalidate();
@@ -172,4 +178,8 @@ public class Notepad {
 
     public JFrame getFrame() { return window;};
     public JTextArea getArea() { return textArea;}
+
+    public void enableSave(){
+        fileMenuItems.get(3).setEnabled(true);
+    }
 }
