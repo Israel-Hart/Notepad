@@ -79,11 +79,8 @@ class FileAction extends AbstractAction  {
         chooser.addChoosableFileFilter(pdfFilter);
         chooser.addChoosableFileFilter(docxFilter);
     }
-
     void clearTextArea() {
         note.getArea().setText("");
     }
-
-
 
 }

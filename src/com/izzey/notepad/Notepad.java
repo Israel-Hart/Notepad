@@ -22,15 +22,15 @@ public class Notepad {
     private ArrayList<JSeparator> separators ;
     private JMenu[] menus;
     private char[] fileShortcuts, editShortcuts;
-    JMenuItem newItem, openItem, saveItem, saveAsItem;
+    JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem;
     private ActionListener fileMenuListener;
     private String snap;
 
     private boolean fileSaved;
-    Notepad() {
+    public Notepad() {
         init();
         addListeners();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
@@ -153,6 +153,7 @@ public class Notepad {
         }
     void addListeners() {
         newItem = fileMenuItems.get(0);
+        newWindowItem = fileMenuItems.get(1);
         openItem = fileMenuItems.get(2);
         saveItem = fileMenuItems.get(3);
         saveAsItem = fileMenuItems.get(4);
@@ -167,6 +168,8 @@ public class Notepad {
 
         newItem.setAction(new CreateNewFile(this, fileItems[0]));
         newItem.setText(fileItems[0]);
+        newWindowItem.setAction(new CreateNewWindow(this, fileItems[1]));
+        newWindowItem.setText(fileItems[1]);
 
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
