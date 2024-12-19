@@ -26,14 +26,14 @@ class FileAction extends AbstractAction  {
         docFilter = new FileTypeFilter(".doc", "Word(2007");
         pdfFilter = new FileTypeFilter(".pdf", "Printable Document Format");
         docxFilter = new FileTypeFilter(".docx", "Word File");
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e)
     {}
 
-    protected void readFile(File file, JTextArea destination) {
+    protected void readFile(File file, JTextArea destination)
+    {
         try{
             reader = new BufferedReader(new FileReader(file));
             String line;
@@ -47,6 +47,14 @@ class FileAction extends AbstractAction  {
         {
             e.printStackTrace();
         }
+    }
+
+    protected void readFile(File file, String destination)
+    {
+        JTextArea textArea = new JTextArea();
+        readFile(file, textArea);
+        String areaText = textArea.getText();
+        destination += areaText;
     }
 
     protected void writeFile(File file)
@@ -71,5 +79,11 @@ class FileAction extends AbstractAction  {
         chooser.addChoosableFileFilter(pdfFilter);
         chooser.addChoosableFileFilter(docxFilter);
     }
+
+    void clearTextArea() {
+        note.getArea().setText("");
+    }
+
+
 
 }

@@ -3,8 +3,7 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 import com.izzey.notepad.Notepad;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 public class SaveFile extends FileAction{
     public SaveFile(Notepad note, String name)
@@ -20,6 +19,7 @@ public class SaveFile extends FileAction{
         if (!note.getSaveState())
             note.updateSaveState(true);
         writeFile(file);
+        note.takeSnap();
     }
 
 }

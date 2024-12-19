@@ -16,6 +16,7 @@ public class OpenFile extends FileAction {
         {
             file = chooser.getSelectedFile();
             readFile(file,note.getArea());
+            note.takeSnap();
         }
 
     }

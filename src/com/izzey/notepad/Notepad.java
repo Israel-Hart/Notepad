@@ -3,6 +3,8 @@ package com.izzey.notepad;
 import com.izzey.notepad.fileactions.*;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,7 +22,9 @@ public class Notepad {
     private ArrayList<JSeparator> separators ;
     private JMenu[] menus;
     private char[] fileShortcuts, editShortcuts;
+    JMenuItem newItem, openItem, saveItem, saveAsItem;
     private ActionListener fileMenuListener;
+    private String snap;
 
     private boolean fileSaved;
     Notepad() {
@@ -35,7 +39,7 @@ public class Notepad {
         this.fileSaved = false;
         window = new JFrame("Notepad");
         menuBar = new JMenuBar();
-        textArea = new JTextArea("This is test sentence.");
+        textArea = new JTextArea();
         scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         fileMenu = new JMenu("File");
         editMenu = new JMenu("Edit");
@@ -146,12 +150,12 @@ public class Notepad {
             window.setJMenuBar(menuBar);
             panel.add(scrollPane);
             window.add(panel);
-
         }
     void addListeners() {
-        JMenuItem openItem = fileMenuItems.get(2);
-        JMenuItem saveItem = fileMenuItems.get(3);
-        JMenuItem saveAsItem = fileMenuItems.get(4);
+        newItem = fileMenuItems.get(0);
+        openItem = fileMenuItems.get(2);
+        saveItem = fileMenuItems.get(3);
+        saveAsItem = fileMenuItems.get(4);
 
         openItem.setAction(new OpenFile(this, fileItems[2]));
         openItem.setText(fileItems[2]); // bug fix for disappearing text on menu item after Action is set
@@ -160,6 +164,26 @@ public class Notepad {
         saveItem.setText(fileItems[3]);
         saveAsItem.setAction(new SaveFileAs(this, fileItems[4]));
         saveAsItem.setText(fileItems[4]);
+
+        newItem.setAction(new CreateNewFile(this, fileItems[0]));
+        newItem.setText(fileItems[0]);
+
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
     }
 
     public void recordSaveOperation() {
@@ -181,5 +205,14 @@ public class Notepad {
 
     public void enableSave(){
         fileMenuItems.get(3).setEnabled(true);
+    }
+
+    public void takeSnap() {
+        snap = getArea().getText();
+    }
+
+    public String getSnap() {return snap;}
+    public void callSaveAction() {
+        saveItem.doClick();
     }
 }
