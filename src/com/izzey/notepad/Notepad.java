@@ -26,7 +26,8 @@ public class Notepad {
     private ActionListener fileMenuListener;
     private String snap;
     private boolean isSaved;
-    public static final int CLOSE_OPERATION = 1;
+    public static final int SAVE_FROM_NEWFILE = 0;
+    public static final int SAVE_FROM_EXIT = 1;
     public Notepad() {
         init();
         addListeners();
@@ -203,11 +204,19 @@ public class Notepad {
             return false;
         return true;
     }
-    public int initiateSave() {
-            int confirmation = JOptionPane.showConfirmDialog(getFrame(),"You made some changes, would you like to save them?", "Save?", JOptionPane.YES_NO_CANCEL_OPTION);
-            if(confirmation == JOptionPane.YES_OPTION){
-                callSaveAction(Notepad.CLOSE_OPERATION);
-            }
+    public int initiateSave(int type) {
+            int confirmation = -1;
+          if(type == Notepad.SAVE_FROM_NEWFILE) {
+               confirmation = JOptionPane.showConfirmDialog(getFrame(), "You made some changes, would you like to save them?", "Save?", JOptionPane.YES_NO_CANCEL_OPTION);
+              if (confirmation == JOptionPane.YES_OPTION) {
+                  callSaveAction(Notepad.SAVE_FROM_NEWFILE);
+              }
+          }else if (type == Notepad.SAVE_FROM_EXIT) {
+               confirmation = JOptionPane.showConfirmDialog(getFrame(), "You made some changes, would you like to save them?", "Save?", JOptionPane.YES_NO_CANCEL_OPTION);
+              if (confirmation == JOptionPane.YES_OPTION) {
+                  callSaveAction(Notepad.SAVE_FROM_EXIT);
+              }
+          }
             return confirmation;
     }
     public void updateArea () {
@@ -225,11 +234,12 @@ public class Notepad {
     }
     public String getSnap() {return snap;}
     public void callSaveAction(int type) {
-        if(type == Notepad.CLOSE_OPERATION)
+        if(type == Notepad.SAVE_FROM_NEWFILE)
         {
+            new SaveFile(this,"save and close").save_and_clear();
+        }else if(type == Notepad.SAVE_FROM_EXIT) {
             new SaveFile(this,"save and close").save_and_close();
-        }else
-            saveItem.doClick();
+        }
     }
     public void updateState() {isSaved = !isSaved;}
     public boolean isSaved() { return isSaved;}

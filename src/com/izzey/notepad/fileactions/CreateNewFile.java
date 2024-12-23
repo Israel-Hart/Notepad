@@ -17,7 +17,7 @@ public class CreateNewFile extends FileAction {
         System.out.println("Click is working");
         //check for changes in file
          if(note.isChanged()){
-             user_input = note.initiateSave();
+             user_input = note.initiateSave(Notepad.SAVE_FROM_NEWFILE);
              if(user_input == JOptionPane.NO_OPTION)
                  note.getArea().setText("");
          }

@@ -31,7 +31,6 @@ class FileAction extends AbstractAction  {
     @Override
     public void actionPerformed(ActionEvent e)
     {}
-
     protected void readFile(File file, JTextArea destination)
     {
         try{
@@ -48,7 +47,6 @@ class FileAction extends AbstractAction  {
             e.printStackTrace();
         }
     }
-
     protected void readFile(File file, String destination)
     {
         JTextArea textArea = new JTextArea();
@@ -67,12 +65,10 @@ class FileAction extends AbstractAction  {
         }
     }
 
-
     private String getActionName(){ return actionName; }
     protected void getLocation() { // returns location selected by user
 
     }
-
     void addFileFilters() {
         chooser.addChoosableFileFilter(txtFilter);
         chooser.addChoosableFileFilter(docFilter);
