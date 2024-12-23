@@ -16,10 +16,23 @@ public class SaveFile extends FileAction{
             return;
         file = chooser.getSelectedFile();
         file = new File(file.getAbsoluteFile() + ".txt");
-        if (!note.getSaveState())
-            note.updateSaveState(true);
+        if (!note.isSaved())
+            note.updateState();
         writeFile(file);
         note.takeSnap();
+    }
+
+    public void save_and_close() {
+        int saveDialog = chooser.showSaveDialog(note.getFrame());
+        if (saveDialog != JFileChooser.APPROVE_OPTION)
+            return;
+        file = chooser.getSelectedFile();
+        file = new File(file.getAbsoluteFile() + ".txt");
+        if (!note.isSaved())
+            note.updateState();
+        writeFile(file);
+        note.takeSnap();
+        note.getArea().setText("");
     }
 
 }

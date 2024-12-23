@@ -18,6 +18,5 @@ public class OpenFile extends FileAction {
             readFile(file,note.getArea());
             note.takeSnap();
         }
-
     }
 }

@@ -22,11 +22,11 @@ public class Notepad {
     private ArrayList<JSeparator> separators ;
     private JMenu[] menus;
     private char[] fileShortcuts, editShortcuts;
-    JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem;
+    JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem, exitItem;
     private ActionListener fileMenuListener;
     private String snap;
-
-    private boolean fileSaved;
+    private boolean isSaved;
+    public static final int CLOSE_OPERATION = 1;
     public Notepad() {
         init();
         addListeners();
@@ -36,7 +36,6 @@ public class Notepad {
         window.setVisible(true);
     }
     void init() {
-        this.fileSaved = false;
         window = new JFrame("Notepad");
         menuBar = new JMenuBar();
         textArea = new JTextArea();
@@ -64,6 +63,7 @@ public class Notepad {
         panel = new JPanel();
         menus = new JMenu[]{fileMenu, editMenu, formatMenu,viewMenu,helpMenu};
         separators = new ArrayList<>();
+        isSaved = false;
 
 
         //generate menuItems
@@ -157,6 +157,7 @@ public class Notepad {
         openItem = fileMenuItems.get(2);
         saveItem = fileMenuItems.get(3);
         saveAsItem = fileMenuItems.get(4);
+        exitItem = fileMenuItems.get(fileMenuItems.size() - 1);
 
         openItem.setAction(new OpenFile(this, fileItems[2]));
         openItem.setText(fileItems[2]); // bug fix for disappearing text on menu item after Action is set
@@ -165,6 +166,10 @@ public class Notepad {
         saveItem.setText(fileItems[3]);
         saveAsItem.setAction(new SaveFileAs(this, fileItems[4]));
         saveAsItem.setText(fileItems[4]);
+
+        int pos = fileItems.length - 1;
+        exitItem.setAction(new Exit(this, fileItems[pos]));
+        exitItem.setText(fileItems[pos]);
 
         newItem.setAction(new CreateNewFile(this, fileItems[0]));
         newItem.setText(fileItems[0]);
@@ -189,16 +194,22 @@ public class Notepad {
         });
     }
 
-    public void recordSaveOperation() {
-        fileSaved = true;
-        fileMenuItems.get(3).setEnabled(false); // disable save button
+    public boolean isChanged() {
+        String then = getSnap();
+        String now = getArea().getText();
+        System.out.println("Now: " + now);
+        System.out.println("Then: " + then);
+        if (now.equals(then) || now.isEmpty())
+            return false;
+        return true;
     }
-    public boolean getSaveState(){
-        return fileSaved;
+    public int initiateSave() {
+            int confirmation = JOptionPane.showConfirmDialog(getFrame(),"You made some changes, would you like to save them?", "Save?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if(confirmation == JOptionPane.YES_OPTION){
+                callSaveAction(Notepad.CLOSE_OPERATION);
+            }
+            return confirmation;
     }
-
-    public void updateSaveState(boolean state) { fileSaved = state; }
-
     public void updateArea () {
         textArea.revalidate();
     }
@@ -209,13 +220,17 @@ public class Notepad {
     public void enableSave(){
         fileMenuItems.get(3).setEnabled(true);
     }
-
     public void takeSnap() {
         snap = getArea().getText();
     }
-
     public String getSnap() {return snap;}
-    public void callSaveAction() {
-        saveItem.doClick();
+    public void callSaveAction(int type) {
+        if(type == Notepad.CLOSE_OPERATION)
+        {
+            new SaveFile(this,"save and close").save_and_close();
+        }else
+            saveItem.doClick();
     }
+    public void updateState() {isSaved = !isSaved;}
+    public boolean isSaved() { return isSaved;}
 }
