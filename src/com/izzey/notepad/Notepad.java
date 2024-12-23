@@ -22,7 +22,7 @@ public class Notepad {
     private ArrayList<JSeparator> separators ;
     private JMenu[] menus;
     private char[] fileShortcuts, editShortcuts;
-    JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem, exitItem;
+    JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem, printItem, exitItem;
     private ActionListener fileMenuListener;
     private String snap;
     private boolean isSaved;
@@ -153,29 +153,14 @@ public class Notepad {
             window.add(panel);
         }
     void addListeners() {
-        newItem = fileMenuItems.get(0);
-        newWindowItem = fileMenuItems.get(1);
-        openItem = fileMenuItems.get(2);
-        saveItem = fileMenuItems.get(3);
-        saveAsItem = fileMenuItems.get(4);
-        exitItem = fileMenuItems.get(fileMenuItems.size() - 1);
-
-        openItem.setAction(new OpenFile(this, fileItems[2]));
-        openItem.setText(fileItems[2]); // bug fix for disappearing text on menu item after Action is set
-
-        saveItem.setAction(new SaveFile(this, fileItems[3]));
-        saveItem.setText(fileItems[3]);
-        saveAsItem.setAction(new SaveFileAs(this, fileItems[4]));
-        saveAsItem.setText(fileItems[4]);
-
-        int pos = fileItems.length - 1;
-        exitItem.setAction(new Exit(this, fileItems[pos]));
-        exitItem.setText(fileItems[pos]);
-
-        newItem.setAction(new CreateNewFile(this, fileItems[0]));
-        newItem.setText(fileItems[0]);
-        newWindowItem.setAction(new CreateNewWindow(this, fileItems[1]));
-        newWindowItem.setText(fileItems[1]);
+        addListener(new CreateNewFile(this, fileItems[0]), 0); //new item
+        addListener(new CreateNewWindow(this, fileItems[1]), 1); //new swing item
+        addListener(new OpenFile(this, fileItems[2]), 2); //open item
+        addListener(new SaveFile(this, fileItems[3]), 3); //save item
+        addListener(new SaveFileAs(this, fileItems[4]), 4); //save item as
+//        addListener(new PageSetup(this, fileItems[5]), 5); //page setup item
+        addListener(new PrintFile(this, fileItems[6]), 6); //print item
+        addListener(new Exit(this, fileItems[7]), 7); //exit item
 
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -193,6 +178,12 @@ public class Notepad {
 
             }
         });
+    }
+
+    void addListener(AbstractAction a, int index) {
+        JMenuItem item = fileMenuItems.get(index);
+        item.addActionListener(a);
+        item.setText(fileItems[index]);
     }
 
     public boolean isChanged() {
