@@ -6,22 +6,20 @@ import java.awt.*;
 import java.awt.print.*;
 import java.awt.event.ActionEvent;
 public class PrintFile extends FileAction{
-
+    private PageFormat pageFormat;
     public PrintFile(Notepad note, String name) {
         super(note, name);
+        this.pageFormat = pageFormat;
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        PrinterJob printerJob = PrinterJob.getPrinterJob();
-
+        PrinterJob printerJob = note.getPageSetup().getPrinterJob();
         printerJob.setPrintable(new Printable() {
             @Override
             public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
                 if (pageIndex > 0) {
                     return NO_SUCH_PAGE; // Only one page to print
                 }
-
                 // Translate the graphics to match the page format
                 Graphics2D g2d = (Graphics2D) graphics;
                 g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
@@ -31,7 +29,6 @@ public class PrintFile extends FileAction{
                 return PAGE_EXISTS;
             }
         });
-
         // Display the print dialog to the user
         if (printerJob.printDialog()) {
             try {

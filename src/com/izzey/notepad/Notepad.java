@@ -28,6 +28,7 @@ public class Notepad {
     private boolean isSaved;
     public static final int SAVE_FROM_NEWFILE = 0;
     public static final int SAVE_FROM_EXIT = 1;
+    private PageSetup pageSetup;
     public Notepad() {
         init();
         addListeners();
@@ -65,6 +66,7 @@ public class Notepad {
         menus = new JMenu[]{fileMenu, editMenu, formatMenu,viewMenu,helpMenu};
         separators = new ArrayList<>();
         isSaved = false;
+        pageSetup = new PageSetup(this,"Page Setup");
 
 
         //generate menuItems
@@ -158,7 +160,7 @@ public class Notepad {
         addListener(new OpenFile(this, fileItems[2]), 2); //open item
         addListener(new SaveFile(this, fileItems[3]), 3); //save item
         addListener(new SaveFileAs(this, fileItems[4]), 4); //save item as
-//        addListener(new PageSetup(this, fileItems[5]), 5); //page setup item
+        addListener(pageSetup, 5); //page setup item
         addListener(new PrintFile(this, fileItems[6]), 6); //print item
         addListener(new Exit(this, fileItems[7]), 7); //exit item
 
@@ -206,6 +208,8 @@ public class Notepad {
                confirmation = JOptionPane.showConfirmDialog(getFrame(), "You made some changes, would you like to save them?", "Save?", JOptionPane.YES_NO_CANCEL_OPTION);
               if (confirmation == JOptionPane.YES_OPTION) {
                   callSaveAction(Notepad.SAVE_FROM_EXIT);
+              }else if(confirmation == JOptionPane.NO_OPTION) {
+                  getFrame().dispose();
               }
           }
             return confirmation;
@@ -216,6 +220,10 @@ public class Notepad {
 
     public JFrame getFrame() { return window;};
     public JTextArea getArea() { return textArea;}
+
+    public PageSetup getPageSetup() {
+        return pageSetup;
+    }
 
     public void enableSave(){
         fileMenuItems.get(3).setEnabled(true);
