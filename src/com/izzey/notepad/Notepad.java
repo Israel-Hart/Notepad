@@ -1,13 +1,31 @@
 package com.izzey.notepad;
 
 import com.izzey.notepad.file.*;
+import com.izzey.notepad.edit.*;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JMenu;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
+import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
 import java.util.ArrayList;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.Font;
+import java.awt.Dimension;
+
 public class Notepad {
     private JFrame window;
     private JPanel panel, scrollPanel;
@@ -50,7 +68,7 @@ public class Notepad {
         helpMenu = new JMenu("Help");
         fileItems = new String[]{"New \t Ctrl+N", "New Window \t Ctrl+Shift+N", "Open \t Ctrl+O", "Save \t Ctrl+S", "Save As\t Ctrl+Shift+S",
                                     "Page Setup", "Print \t Ctrl+P", "Exit"};
-        editItems = new String[]{"Undo \t Ctrl+Z", "Cut \t Ctrl+X", "Paste \t Ctrl+V", "Delete \t Del", "Find \t Ctrl+F", "Find Next \t F3", "Find Previous \t Shift+F3",
+        editItems = new String[]{"Undo \t Ctrl+Z", "Redo \t Ctrl+Z", "Cut \t Ctrl+X", "Paste \t Ctrl+V", "Delete \t Del", "Find \t Ctrl+F", "Find Next \t F3", "Find Previous \t Shift+F3",
                                     "Replace \t Ctrl+H", "Goto \t Ctrl+G", "Select All \t Ctrl+A", "Time/Date \t F5"};
         formatItems = new String[]{"Word Wrap", "Font..."};
         viewItems = new String[]{"Zoom", "Status Bar"};
@@ -86,7 +104,7 @@ public class Notepad {
         }
         for (int i = 0; i < editItems.length; i++) { //editMenu
             JMenuItem item = new JMenuItem(editItems[i]);
-            if(i == 1 || i == 5 || i == 10)
+            if(i == 2 || i == 5 || i == 10)
             {
                 JSeparator sp = new JSeparator(SwingConstants.HORIZONTAL);
                 editMenu.add(sp);
@@ -167,7 +185,7 @@ public class Notepad {
         addListener(new Exit(this, fileItems[7]), 7); //exit item
 
         //edit action listeners
-
+        addListener(new Undo(this), 0);
 
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
