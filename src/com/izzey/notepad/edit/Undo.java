@@ -1,7 +1,7 @@
 package com.izzey.notepad.edit;
 import com.izzey.notepad.Notepad;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import javax.swing.undo.CannotUndoException;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;

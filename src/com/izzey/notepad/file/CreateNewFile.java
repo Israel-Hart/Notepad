@@ -2,7 +2,7 @@ package com.izzey.notepad.file;
 
 import com.izzey.notepad.Notepad;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 
 public class CreateNewFile extends FileAction {

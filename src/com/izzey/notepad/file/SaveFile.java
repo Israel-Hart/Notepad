@@ -1,8 +1,8 @@
 package com.izzey.notepad.file;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.File;
 import com.izzey.notepad.Notepad;
-import javax.swing.*;
+import javax.swing.JFileChooser;
 
 public class SaveFile extends FileAction{
     public SaveFile(Notepad note, String name)

@@ -1,8 +1,10 @@
 package com.izzey.notepad.edit;
 import com.izzey.notepad.Notepad;
 
-import javax.swing.*;
+import javax.swing.JTextArea;
+import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
+import javax.swing.KeyStroke;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.Document;

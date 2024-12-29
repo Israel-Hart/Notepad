@@ -1,7 +1,6 @@
 package com.izzey.notepad.edit;
 
 import com.izzey.notepad.Notepad;
-import javax.swing.JTextArea;
 import java.awt.event.ActionEvent;
 
 public class Paste extends EditAction {

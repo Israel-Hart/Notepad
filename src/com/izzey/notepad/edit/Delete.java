@@ -1,6 +1,5 @@
 package com.izzey.notepad.edit;
 
-import javax.swing.JTextArea;
 import com.izzey.notepad.Notepad;
 import java.awt.event.ActionEvent;
 import java.awt.Robot;

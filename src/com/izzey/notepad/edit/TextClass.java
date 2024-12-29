@@ -16,11 +16,11 @@ import java.util.Arrays;
 
 public class TextClass extends JFrame {
     UndoManager undoManager;
-    KeyStroke undoStroke, redoStroke;
-    TextClass() {
+    KeyStroke undoStroke, redoStroke, limitedStroke;    TextClass() {
         undoManager = new UndoManager();
         undoStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK);
         redoStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK);
+        limitedStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK);
         addPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
@@ -32,12 +32,13 @@ public class TextClass extends JFrame {
          JButton btn = new JButton("Undo"), btn_two = new JButton("Redo");
          UndoAction undoAction = new UndoAction();
          RedoAction redoAction = new RedoAction();
+         LimitedAction limitedAction = new LimitedAction();
 
-         textArea.setFont(new Font("Serif", Font.PLAIN, 13));
+         textArea.setFont(new Font("Serif", Font.PLAIN, 16));
          textArea.setForeground(Color.white);
          textArea.setForeground(Color.blue);
-         textArea.setPreferredSize(new Dimension(500, 340));
-         textArea.setBorder(BorderFactory.createEmptyBorder()) ;
+         textArea.setPreferredSize(new Dimension(490, 340));
+         textArea.setBorder(BorderFactory.createEmptyBorder(20,20,20,20)) ;
          textArea.revalidate();
          textArea.getDocument().addUndoableEditListener(new UndoableEditListener() {
              @Override
@@ -45,14 +46,16 @@ public class TextClass extends JFrame {
                 undoManager.addEdit(ue.getEdit());
              }
          });
-        textArea.getInputMap(JComponent.WHEN_FOCUSED).put(undoStroke, "undo");
-        textArea.getInputMap(JComponent.WHEN_FOCUSED).put(redoStroke, "redo");
-         textArea.getActionMap().put("undo",undoAction );
-         textArea.getActionMap().put("redo", redoAction);
+//        textArea.getInputMap(JComponent.WHEN_FOCUSED).put(undoStroke, "undo");
+//        textArea.getInputMap(JComponent.WHEN_FOCUSED).put(redoStroke, "redo");
+        textArea.getInputMap(JComponent.WHEN_FOCUSED).put(limitedStroke, "limited");
+//         textArea.getActionMap().put("undo",undoAction );
+//         textArea.getActionMap().put("redo", redoAction);
+         textArea.getActionMap().put("limited", limitedAction);
 
          styleButton(btn);
          styleButton(btn_two);
-         btn.addActionListener(undoAction);
+         btn.addActionListener(limitedAction);
          btn_two.addActionListener(redoAction);
 
          panel.setPreferredSize(new Dimension(500,50));
@@ -85,8 +88,8 @@ public class TextClass extends JFrame {
         ActionEvent e;
         @Override
         public void actionPerformed(ActionEvent e) {
+            this.e = e;
             try {
-                this.e = e;
                 undoManager.undo();
             }catch(CannotUndoException ignore) {}
         }
@@ -100,8 +103,8 @@ public class TextClass extends JFrame {
         ActionEvent e;
         @Override
         public void actionPerformed(ActionEvent e) {
+            this.e = e;
             try {
-                this.e = e;
                 undoManager.redo();
             }catch(CannotRedoException ignore) {}
         }
@@ -109,6 +112,31 @@ public class TextClass extends JFrame {
             JButton btn = (JButton) e.getSource();
             btn.setEnabled(undoManager.canRedo());
             putValue(Action.NAME, undoManager.getRedoPresentationName());
+        }
+    }
+    class LimitedAction extends AbstractAction {
+        private ActionEvent e;
+        private boolean clicked;
+        LimitedAction() {
+            clicked = false;
+        }
+        @Override
+        public void actionPerformed(ActionEvent e ) {
+            this.e = e;
+            try {
+                if(!clicked)
+                    undoManager.undo();
+                else
+                    undoManager.redo();
+            }catch(CannotUndoException | CannotRedoException ignored) {}
+            update();
+        }
+
+        public void update(){
+//            JButton btn = (JButton) e.getSource();
+//            btn.setEnabled(undoManager.canRedo());
+            putValue(Action.NAME, undoManager.getRedoPresentationName());
+            clicked = !clicked;
         }
     }
 }

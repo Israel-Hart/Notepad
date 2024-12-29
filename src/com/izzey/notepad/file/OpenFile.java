@@ -1,7 +1,7 @@
 package com.izzey.notepad.file;
 import com.izzey.notepad.Notepad;
-import javax.swing.*;
-import java.awt.event.*;
+import javax.swing.JFileChooser;
+import java.awt.event.ActionEvent;
 public class OpenFile extends FileAction {
     public OpenFile(Notepad note, String name)
     {
