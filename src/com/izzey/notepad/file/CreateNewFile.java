@@ -1,4 +1,4 @@
-package com.izzey.notepad.fileactions;
+package com.izzey.notepad.file;
 
 import com.izzey.notepad.Notepad;
 

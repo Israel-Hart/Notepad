@@ -1,11 +1,8 @@
-package com.izzey.notepad.fileactions;
+package com.izzey.notepad.file;
 import java.awt.event.ActionEvent;
 import com.izzey.notepad.Notepad;
-import java.io.BufferedWriter;
+
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Path;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 

@@ -1,11 +1,10 @@
 package com.izzey.notepad;
 
-import com.izzey.notepad.fileactions.*;
+import com.izzey.notepad.file.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.*;
@@ -36,6 +35,8 @@ public class Notepad {
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+    }
+    public Notepad(String name) { //empty call for test purposes
     }
     void init() {
         window = new JFrame("Notepad");
@@ -155,6 +156,7 @@ public class Notepad {
             window.add(panel);
         }
     void addListeners() {
+        ///file action listeners
         addListener(new CreateNewFile(this, fileItems[0]), 0); //new item
         addListener(new CreateNewWindow(this, fileItems[1]), 1); //new swing item
         addListener(new OpenFile(this, fileItems[2]), 2); //open item
@@ -163,6 +165,9 @@ public class Notepad {
         addListener(pageSetup, 5); //page setup item
         addListener(new PrintFile(this, fileItems[6]), 6); //print item
         addListener(new Exit(this, fileItems[7]), 7); //exit item
+
+        //edit action listeners
+
 
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override

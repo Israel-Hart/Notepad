@@ -1,4 +1,4 @@
-package com.izzey.notepad.fileactions;
+package com.izzey.notepad.file;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import com.izzey.notepad.Notepad;
