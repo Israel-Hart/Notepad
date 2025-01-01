@@ -16,7 +16,11 @@ public class Undo extends EditAction{
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            undoManager.undo();
+            if(!clicked)
+                undoManager.undo();
+            else
+                undoManager.redo();
         }catch(CannotUndoException ignored) {}
+        update();
     }
 }

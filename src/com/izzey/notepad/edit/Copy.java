@@ -9,5 +9,8 @@ public class Copy extends EditAction {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {textArea.copy();}
+    public void actionPerformed(ActionEvent e) {
+        textArea.copy();
+        update();
+    }
 }
