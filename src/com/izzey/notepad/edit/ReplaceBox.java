@@ -6,26 +6,32 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JCheckBox;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
-import javax.swing.BorderFactory;
 
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.GridLayout;
 
 
 public class ReplaceBox extends JFrame {
     private JPanel panel, buttonPanel;
     private JLabel findWhatLabel, replaceLabel, matchLabel, wrapLabel;
     private JTextField findWhatField, replaceField;
-    private JButton findNextBtn, replaceBtn,replaceWithAll, cancelBtn;
+    private JButton findNextBtn, replaceBtn,replaceWithAllBtn, cancelBtn;
     private JCheckBox matchCheckBox, wrapCheckBox;
     private final Font font= new Font("callibri", Font.PLAIN, 11);
+    private GridLayout buttonLayout;
     public ReplaceBox() {
         panel = new JPanel();
         buttonPanel = new JPanel();
-
+        //Layout for buttonPanel
+        buttonLayout = new GridLayout(4,1);
+        buttonLayout.setVgap(6);
+        matchCheckBox = new JCheckBox();
+        wrapCheckBox = new JCheckBox();
+        matchLabel = new JLabel("Match case");
+        wrapLabel = new JLabel("Wrap around");
         findWhatLabel = new JLabel("Find what:");
         replaceLabel = new JLabel("Replace with:");
         matchLabel = new JLabel("Match case");
@@ -36,7 +42,7 @@ public class ReplaceBox extends JFrame {
 
         findNextBtn = new JButton("Find Next");
         replaceBtn = new JButton("Replace");
-        replaceWithAll = new JButton("Replace All");
+        replaceWithAllBtn = new JButton("Replace All");
         cancelBtn = new JButton("Cancel");
 
         matchCheckBox = new JCheckBox();
@@ -51,9 +57,17 @@ public class ReplaceBox extends JFrame {
         findWhatField.setBounds(80, 15, 170, 20);
         replaceField.setBounds(80, 42, 170, 20);
 
-        buttonPanel.setBounds(260, 10, 90, 110);
-        buttonPanel.setBackground(Color.yellow);
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBounds(253, 10, 90, 110);
+//        buttonPanel.setBackground(Color.yellow);
+
+        matchCheckBox.setBounds(10,90,20,20);
+        matchLabel.setBounds(30,90,150,20);
+
+        wrapCheckBox.setBounds(10,115,20,20);
+        wrapLabel.setBounds(30,115,150,20);
+
+
+        buttonPanel.setLayout(buttonLayout);
 
         setStyle(findWhatField);
         setStyle(findWhatLabel);
@@ -62,12 +76,12 @@ public class ReplaceBox extends JFrame {
         setStyle(wrapLabel);
         setStyleBtn(findNextBtn);
         setStyleBtn(replaceBtn);
-        setStyleBtn(replaceWithAll);
+        setStyleBtn(replaceWithAllBtn);
         setStyleBtn(cancelBtn);
 
         buttonPanel.add(findNextBtn);
         buttonPanel.add(replaceBtn);
-        buttonPanel.add(replaceWithAll);
+        buttonPanel.add(replaceWithAllBtn);
         buttonPanel.add(cancelBtn);
 
         panel.add(findWhatLabel);
@@ -75,9 +89,14 @@ public class ReplaceBox extends JFrame {
         panel.add(findWhatField);
         panel.add(replaceField);
         panel.add(buttonPanel);
+        panel.add(wrapLabel);
+        panel.add(matchLabel);
+        panel.add(wrapCheckBox);
+        panel.add(matchCheckBox);
 
         add(panel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setTitle("Replace");
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -87,7 +106,9 @@ public class ReplaceBox extends JFrame {
     }
     void setStyleBtn(JButton btn) {
         setStyle(btn);
-        btn.setPreferredSize(new Dimension(100, 40));
+//        btn.setPreferredSize(new Dimension(100, 40));
+        btn.setFocusable(false);
+        btn.setBackground(new Color(233,233,233));
     }
     public static void main(String[] args) {
         new ReplaceBox();
