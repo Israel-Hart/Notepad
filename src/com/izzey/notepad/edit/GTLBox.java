@@ -13,7 +13,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 
-public class GTLBox extends JFrame{
+public class GTLBox extends IconlessFrame{
     private JPanel panel, buttonPanel;
     private JTextField textField;
     private JButton gotoBtn, cancelBtn;
@@ -54,6 +54,7 @@ public class GTLBox extends JFrame{
         panel.add(buttonPanel);
         add(panel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Go To Line");
         pack();
         setLocationRelativeTo(null);
         setVisible(true);

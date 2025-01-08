@@ -9,7 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JRadioButton;
 import java.awt.Dimension;
 import java.awt.Color;
-public class FindBox extends JFrame {
+public class FindBox extends IconlessFrame {
     private JButton findNextBtn, cancelBtn ;
     private JPanel panel, dirPanel; // dirPanel=Direction Panel
     private JCheckBox matchCheckBox, wrapCheckBox;

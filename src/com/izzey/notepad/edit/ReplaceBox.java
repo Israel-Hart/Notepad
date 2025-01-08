@@ -14,7 +14,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 
 
-public class ReplaceBox extends JFrame {
+public class ReplaceBox extends IconlessFrame {
     private JPanel panel, buttonPanel;
     private JLabel findWhatLabel, replaceLabel, matchLabel, wrapLabel;
     private JTextField findWhatField, replaceField;
