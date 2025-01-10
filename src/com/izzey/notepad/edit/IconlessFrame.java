@@ -1,7 +1,7 @@
 package com.izzey.notepad.edit;
 
 import javax.swing.JFrame;
-import javax.swing.ImageIcon;
+//import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
