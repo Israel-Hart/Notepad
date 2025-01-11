@@ -184,6 +184,7 @@ public class Notepad {
         addEditListener(new Delete(this),  3);
         addEditListener(new Delete(this),  3);
         addEditListener(new SelectAll(this), 9);
+        addEditListener(new TimeDate(this), 10);
 
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override

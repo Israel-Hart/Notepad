@@ -10,7 +10,6 @@ public class SelectAll extends EditAction{
         super(notepad);
         area = notepad.getArea();
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         area.requestFocusInWindow();
