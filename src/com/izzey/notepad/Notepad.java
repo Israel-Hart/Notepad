@@ -183,6 +183,7 @@ public class Notepad {
         addEditListener(new Paste(this),  2);
         addEditListener(new Delete(this),  3);
         addEditListener(new Delete(this),  3);
+        addEditListener(new SelectAll(this), 9);
 
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
