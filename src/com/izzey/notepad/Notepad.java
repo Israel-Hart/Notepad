@@ -36,12 +36,14 @@ public class Notepad {
     private JScrollPane scrollPane;
     private JMenuBar menuBar;
     private String[] fileItems, editItems, formatItems, viewItems, helpItems;
+    private boolean actionStete;
     private ArrayList<JSeparator> separators ;
     private JMenu[] menus;
     JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem, printItem, exitItem;
     private ActionListener fileMenuListener;
     private String snap;
     private boolean isSaved;
+    private boolean actionState;
     public static final int SAVE_FROM_NEWFILE = 0;
     public static final int SAVE_FROM_EXIT = 1;
     private PageSetup pageSetup;
@@ -68,6 +70,14 @@ public class Notepad {
         editItems = new String[]{"Undo","Cut", "Paste", "Delete", "Find", "Find Next", "Find Previous",
                                     "Replace", "Goto", "Select All", "Time/Date"};
         formatItems = new String[]{"Word Wrap", "Font..."};
+        menuBar.setBorder(BorderFactory.createEmptyBorder());
+        menuBar.setBackground(Color.white);
+        //style menus
+        for(JMenu m : menus) {
+            m.setFont(UI_FONT);
+            JPopupMenu popup = m.getPopupMenu();
+            popup.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
+        }
         viewItems = new String[]{"Zoom", "Status Bar"};
         helpItems = new String[]{"Get Help", "Send Feedback", "About Notepad"};
         menuItems = new ArrayList<>();  // will be used to reference menu Items
@@ -80,6 +90,7 @@ public class Notepad {
         menus = new JMenu[]{fileMenu, editMenu, formatMenu,viewMenu,helpMenu};
         separators = new ArrayList<>();
         isSaved = false;
+        actionState = false;
         pageSetup = new PageSetup(this,"Page Setup");
 
         //generate menuItems
@@ -121,7 +132,7 @@ public class Notepad {
         for (int i = 0; i < helpItems.length; i++) { // helpMenu
             JMenuItem item = new JMenuItem(helpItems[i]);
             if(i == 3)
-            {   
+            {
                 JSeparator sp = new JSeparator(SwingConstants.HORIZONTAL);
                 helpMenu.add(sp);
                 separators.add(sp);
@@ -130,14 +141,6 @@ public class Notepad {
             menuItems.add(item);
         }
         //Menubar
-        menuBar.setBorder(BorderFactory.createEmptyBorder());
-        menuBar.setBackground(Color.white);
-        //style menus
-        for(JMenu m : menus) {
-            m.setFont(UI_FONT);
-            JPopupMenu popup = m.getPopupMenu();
-            popup.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
-        }
         //style separators
         for(JSeparator sp : separators) { //make sure all separators can be styled
             sp.setForeground(Color.lightGray);
@@ -168,6 +171,18 @@ public class Notepad {
             panel.add(scrollPane);
             window.add(panel);
         }
+        void updateActionState() {
+        actionState = !actionState;
+             updateMenuItem();
+        }
+        void updateMenuItem(){
+            for(JMenuItem item : menuItems) {
+                if(actionState)
+                {
+                    item.setEnabled(false);
+                }
+            }
+        }
     void addListeners() {
         addListener(new CreateNewFile(this, fileItems[0]), 0); //new item
         addListener(new CreateNewWindow(this, fileItems[1]), 1); //new swing item
@@ -186,10 +201,11 @@ public class Notepad {
         addEditListener(new SelectAll(this), 9);
         addEditListener(new TimeDate(this), 10);
 
+
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-
+                updateActionState();
             }
 
             @Override
@@ -213,6 +229,7 @@ public class Notepad {
         item.addActionListener(a);
         item.setText(editItems[index]);
     }
+
     public boolean isChanged() {
         String then = getSnap();
         String now = getArea().getText();

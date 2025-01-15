@@ -20,8 +20,6 @@ public class TimeDate extends EditAction{
     public void actionPerformed(ActionEvent e) {
         try {
             area.append(getDate());
-        }catch(DateTimeException ignored){
-
-        }
+        }catch(DateTimeException ignored){}
     }
 }
