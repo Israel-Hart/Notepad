@@ -15,6 +15,20 @@ public class Notepad {
     private final Font UI_FONT  = new Font("arial", Font.PLAIN, 12);
     private JMenu fileMenu, editMenu, formatMenu, viewMenu, helpMenu;
     private ArrayList<JMenuItem> menuItems, fileMenuItems, editMenuItems, formatMenuItems, viewMenuItems, helpMenuItems;
+
+    //Refactor Code
+    private JMenuItem newFileItem, newWindowItem, exitItem, openFileItem,
+            pageSetupItem, printFileItem, saveFileItem, saveAsitem;
+
+    private JMenuItem copyItem, cutItem, deleteItem, findItem, findNextItem, findPreviousItem,
+            pasteItem, redoItem, selectAllItem, timeDateItem, undoItem, gotoItem, replaceItem;
+
+    private JMenuItem fontItem, wordWrapItem;
+
+    private JMenuItem zoomItem, statusBarItem;
+
+    private viewHelpItem, sendFeedbackItem, aboutNotepadItem;
+
     private JTextArea textArea;
     private JScrollPane scrollPane;
     private JMenuBar menuBar;
@@ -49,6 +63,47 @@ public class Notepad {
         helpMenu = new JMenu("Help");
         fileItems = new String[]{"New \t Ctrl+N", "New Window \t Ctrl+Shift+N", "Open \t Ctrl+O", "Save \t Ctrl+S", "Save As\t Ctrl+Shift+S",
                                     "Page Setup", "Print \t Ctrl+P", "Exit"};
+
+        //Refactor Code Starts
+        //File Items
+        assignMenuItem(newFileItem, "New \t Ctrl+N", fileMenuItems);
+        assignMenuItem(newWindowItem, "New Window \t Ctrl+Shift+N", fileMenuItems);
+        assignMenuItem(opeFileItem, "Open \t Ctrl+O", fileMenuItems);
+        assignMenuItem(saveItem, "Save \t Ctrl+S", fileMenuItems);
+        assignMenuItem(saveAsItem, "Save As\t Ctrl+Shift+S", fileMenuItems);
+        assignMenuItem(pageSetupItem, "Page Setup", fileMenuItems);
+        assignMenuItem(printFileItem, "Print \t Ctrl+P", fileMenuItems);
+        assignMenuItem(exitItem, "\"Exit", fileMenuItems);
+
+        //Edit Items
+        assignMenuItem(copyItem, "Copy \t Ctrl+C", editMenuItems);
+        assignMenuItem(cutItem, "Cut \t Ctrl+X", editMenuItems);
+        assignMenuItem(deleteItem, "Delete \t Del", editMenuItems);
+        assignMenuItem(findItem, "Find \t Ctrl+F", editMenuItems);
+        assignMenuItem(findNextItem, "Find Next \t F3", editMenuItems);
+        assignMenuItem(findPreviousItem, "Find Previous \t Shift+F3", editMenuItems);
+        assignMenuItem(pasteItem, "Paste \t Ctrl+V", editMenuItems);
+        assignMenuItem(redoItem, "Redo \t Ctrl+D", editMenuItems);
+        assignMenuItem(selectAllItem, "Select All \t Ctrl+A",editMenuItems);
+        assignMenuItem(timeDateItem, "Time/Date \t F5", editMenuItems);
+        assignMenuItem(undoItem, "Undo \t Ctrl+Z", editMenuItems);
+        assignMenuItem(gotoItem, "Goto \t Ctrl+G", editMenuItems);
+        assignMenuItem(replaceItem, "Replace \t Ctrl+H" editMenuItems);
+
+        //Format
+        assignMenuItem(fontItem, "Font...", formatMenuItems);
+        assignMenuItem(wordWrapItem, "Word Wrap", formatMenuItems);
+
+        //View
+        assignMenuItem(zoomItem,"Zoom", viewMenuItems);
+        assignMenuItem(statusBarItem, "Status Bar", viewMenuItems);
+
+        //Help
+        assignMenuItem(viewHelpItem, "Get Help", helpMenuItems);
+        assignMenuItem(sendFeedbackItem, "Send Feedback", helpMenuItems);
+        assignMenuItem(aboutNotepadItem, "About Notepad", helpMenuItems);
+        //Refactor Code Ends
+
         editItems = new String[]{"Undo \t Ctrl+Z", "Cut \t Ctrl+X", "Paste \t Ctrl+V", "Delete \t Del", "Find \t Ctrl+F", "Find Next \t F3", "Find Previous \t Shift+F3",
                                     "Replace \t Ctrl+H", "Goto \t Ctrl+G", "Select All \t Ctrl+A", "Time/Date \t F5"};
         formatItems = new String[]{"Word Wrap", "Font..."};
@@ -68,6 +123,50 @@ public class Notepad {
         isSaved = false;
         pageSetup = new PageSetup(this,"Page Setup");
 
+
+        void assignMenuItem(JMenuItem item, String text, ArrayList<JMenuItem> itemList)
+        {
+            item = new JMenuItem(text);
+            itemList.add(item);
+        }
+
+        //Refactor Code Starts
+        //File Items
+        for(JMenuItem item : fileMenuItems){
+            item.setFont(UI_FONT);
+//            item.setBorder(BorderFactory.createEmptyBorder());
+            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
+            item.setFocusable(false);
+        }
+        //Edit Items
+        for(JMenuItem item : editMenuItems){
+            item.setFont(UI_FONT);
+//            item.setBorder(BorderFactory.createEmptyBorder());
+            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
+            item.setFocusable(false);
+        }
+
+        //Format Items
+        for(JMenuItem item : formatMenuItems){
+            item.setFont(UI_FONT);
+//            item.setBorder(BorderFactory.createEmptyBorder());
+            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
+            item.setFocusable(false);
+        }
+        //View Items
+        for(JMenuItem item : viewMenuItems){
+            item.setFont(UI_FONT);
+//            item.setBorder(BorderFactory.createEmptyBorder());
+            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
+            item.setFocusable(false);
+        }
+        //Help Items
+        for(JMenuItem item : helpMenuItems){
+            item.setFont(UI_FONT);
+//            item.setBorder(BorderFactory.createEmptyBorder());
+            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
+            item.setFocusable(false);
+        }
 
         //generate menuItems
         for (int i = 0; i < fileItems.length; i++) {  // fileMenu
@@ -164,6 +263,15 @@ public class Notepad {
         addListener(new PrintFile(this, fileItems[6]), 6); //print item
         addListener(new Exit(this, fileItems[7]), 7); //exit item
 
+
+        addListener(new CreateNewFile(this, newFileItem, newFileItem.getText())); //new item
+        addListener(new CreateNewWindow(this, newWindowItem), newWindowItem.getText() ); //new swing item
+        addListener(new OpenFile(this, openFileItem, openFileItem.getText())); //open item
+        addListener(new SaveFile(this, fileItems[3]), 3); //save item
+        addListener(new SaveFileAs(this, fileItems[4]), 4); //save item as
+        addListener(pageSetup, 5); //page setup item
+        addListener(new PrintFile(this, fileItems[6]), 6); //print item
+        addListener(new Exit(this, fileItems[7]), 7); //exit item
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -186,6 +294,12 @@ public class Notepad {
         JMenuItem item = fileMenuItems.get(index);
         item.addActionListener(a);
         item.setText(fileItems[index]);
+    }
+
+    void addListener(AbstractAction a, JMenuItem item) {
+        String clone = item.getText();
+        item.addActionListener(a);
+        item.setText(clone);
     }
 
     public boolean isChanged() {
