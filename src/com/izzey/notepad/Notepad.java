@@ -1,12 +1,29 @@
 package com.izzey.notepad;
 
-import com.izzey.notepad.fileactions.*;
+import com.izzey.notepad.file.*;
+import com.izzey.notepad.edit.*;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JScrollBar;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.AbstractAction;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.Dimension;
+
 import java.util.ArrayList;
 import java.awt.event.*;
 public class Notepad {
@@ -19,13 +36,14 @@ public class Notepad {
     private JScrollPane scrollPane;
     private JMenuBar menuBar;
     private String[] fileItems, editItems, formatItems, viewItems, helpItems;
+    private boolean actionStete;
     private ArrayList<JSeparator> separators ;
     private JMenu[] menus;
-    private char[] fileShortcuts, editShortcuts;
     JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem, printItem, exitItem;
     private ActionListener fileMenuListener;
     private String snap;
     private boolean isSaved;
+    private boolean actionState;
     public static final int SAVE_FROM_NEWFILE = 0;
     public static final int SAVE_FROM_EXIT = 1;
     private PageSetup pageSetup;
@@ -49,13 +67,19 @@ public class Notepad {
         helpMenu = new JMenu("Help");
         fileItems = new String[]{"New \t Ctrl+N", "New Window \t Ctrl+Shift+N", "Open \t Ctrl+O", "Save \t Ctrl+S", "Save As\t Ctrl+Shift+S",
                                     "Page Setup", "Print \t Ctrl+P", "Exit"};
-        editItems = new String[]{"Undo \t Ctrl+Z", "Cut \t Ctrl+X", "Paste \t Ctrl+V", "Delete \t Del", "Find \t Ctrl+F", "Find Next \t F3", "Find Previous \t Shift+F3",
-                                    "Replace \t Ctrl+H", "Goto \t Ctrl+G", "Select All \t Ctrl+A", "Time/Date \t F5"};
+        editItems = new String[]{"Undo","Cut", "Paste", "Delete", "Find", "Find Next", "Find Previous",
+                                    "Replace", "Goto", "Select All", "Time/Date"};
         formatItems = new String[]{"Word Wrap", "Font..."};
+        menuBar.setBorder(BorderFactory.createEmptyBorder());
+        menuBar.setBackground(Color.white);
+        //style menus
+        for(JMenu m : menus) {
+            m.setFont(UI_FONT);
+            JPopupMenu popup = m.getPopupMenu();
+            popup.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
+        }
         viewItems = new String[]{"Zoom", "Status Bar"};
         helpItems = new String[]{"Get Help", "Send Feedback", "About Notepad"};
-        fileShortcuts = new char[]{'N', 'N', 'O', 'S', 'S','s','d','b'};
-        editShortcuts = new char[]{'Z', 'C', 'X', 'C', 'V'};
         menuItems = new ArrayList<>();  // will be used to reference menu Items
         fileMenuItems = new ArrayList<>();
         editMenuItems = new ArrayList<>();
@@ -66,8 +90,8 @@ public class Notepad {
         menus = new JMenu[]{fileMenu, editMenu, formatMenu,viewMenu,helpMenu};
         separators = new ArrayList<>();
         isSaved = false;
+        actionState = false;
         pageSetup = new PageSetup(this,"Page Setup");
-
 
         //generate menuItems
         for (int i = 0; i < fileItems.length; i++) {  // fileMenu
@@ -91,6 +115,7 @@ public class Notepad {
                 editMenu.add(sp);
                 separators.add(sp);
             }
+            editMenuItems.add(item);
             editMenu.add(item);
             menuItems.add(item);
         }
@@ -107,7 +132,7 @@ public class Notepad {
         for (int i = 0; i < helpItems.length; i++) { // helpMenu
             JMenuItem item = new JMenuItem(helpItems[i]);
             if(i == 3)
-            {   
+            {
                 JSeparator sp = new JSeparator(SwingConstants.HORIZONTAL);
                 helpMenu.add(sp);
                 separators.add(sp);
@@ -116,14 +141,6 @@ public class Notepad {
             menuItems.add(item);
         }
         //Menubar
-        menuBar.setBorder(BorderFactory.createEmptyBorder());
-        menuBar.setBackground(Color.white);
-        //style menus
-        for(JMenu m : menus) {
-            m.setFont(UI_FONT);
-            JPopupMenu popup = m.getPopupMenu();
-            popup.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
-        }
         //style separators
         for(JSeparator sp : separators) { //make sure all separators can be styled
             sp.setForeground(Color.lightGray);
@@ -154,6 +171,18 @@ public class Notepad {
             panel.add(scrollPane);
             window.add(panel);
         }
+        void updateActionState() {
+        actionState = !actionState;
+             updateMenuItem();
+        }
+        void updateMenuItem(){
+            for(JMenuItem item : menuItems) {
+                if(actionState)
+                {
+                    item.setEnabled(false);
+                }
+            }
+        }
     void addListeners() {
         addListener(new CreateNewFile(this, fileItems[0]), 0); //new item
         addListener(new CreateNewWindow(this, fileItems[1]), 1); //new swing item
@@ -162,12 +191,21 @@ public class Notepad {
         addListener(new SaveFileAs(this, fileItems[4]), 4); //save item as
         addListener(pageSetup, 5); //page setup item
         addListener(new PrintFile(this, fileItems[6]), 6); //print item
-        addListener(new Exit(this, fileItems[7]), 7); //exit item
+        addListener(new Exit(this, fileItems[7]), 7); //exit item/*
+
+        addEditListener(new Undo(this),  0);
+        addEditListener(new Cut(this),  1);
+        addEditListener(new Paste(this),  2);
+        addEditListener(new Delete(this),  3);
+        addEditListener(new Delete(this),  3);
+        addEditListener(new SelectAll(this), 9);
+        addEditListener(new TimeDate(this), 10);
+
 
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-
+                updateActionState();
             }
 
             @Override
@@ -181,11 +219,15 @@ public class Notepad {
             }
         });
     }
-
     void addListener(AbstractAction a, int index) {
         JMenuItem item = fileMenuItems.get(index);
         item.addActionListener(a);
         item.setText(fileItems[index]);
+    }
+    void addEditListener(AbstractAction a, int index) {
+        JMenuItem item = editMenuItems.get(index);
+        item.addActionListener(a);
+        item.setText(editItems[index]);
     }
 
     public boolean isChanged() {
@@ -217,14 +259,11 @@ public class Notepad {
     public void updateArea () {
         textArea.revalidate();
     }
-
     public JFrame getFrame() { return window;};
     public JTextArea getArea() { return textArea;}
-
     public PageSetup getPageSetup() {
         return pageSetup;
     }
-
     public void enableSave(){
         fileMenuItems.get(3).setEnabled(true);
     }

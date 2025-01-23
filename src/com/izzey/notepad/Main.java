@@ -1,7 +1,6 @@
 package com.izzey.notepad;
 
-import javax.swing.*;
-import javax.swing.plaf.multi.MultiLookAndFeel;
+import javax.swing.UIManager;
 
 public class Main {
     public static void main(String[] args)

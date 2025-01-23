@@ -1,10 +1,18 @@
-package com.izzey.notepad.fileactions;
+package com.izzey.notepad.file;
 
 import com.izzey.notepad.Notepad;
-import javax.swing.*;
-import java.io.*;
-import java.awt.event.*;
-import javax.swing.event.DocumentListener;
+import javax.swing.AbstractAction;
+import javax.swing.JFileChooser;
+import javax.swing.JTextArea;
+
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import java.awt.event.ActionEvent;
 import javax.swing.filechooser.FileFilter;
 
 class FileAction extends AbstractAction  {
