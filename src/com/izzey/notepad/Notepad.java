@@ -36,6 +36,7 @@ public class Notepad {
     private JScrollPane scrollPane;
     private JMenuBar menuBar;
     private String[] fileItems, editItems, formatItems, viewItems, helpItems;
+    private ArrayList<JMenuItem> responsiveMenus;
     private boolean actionStete;
     private ArrayList<JSeparator> separators ;
     private JMenu[] menus;
@@ -56,6 +57,7 @@ public class Notepad {
         window.setVisible(true);
     }
     void init() {
+        responsiveMenus = new ArrayList<>();
         window = new JFrame("Notepad");
         menuBar = new JMenuBar();
         textArea = new JTextArea();
@@ -157,7 +159,7 @@ public class Notepad {
         }
             textArea.setFont(UI_FONT);
             scrollPane.setPreferredSize(new Dimension(800, 400));
-            scrollPane.setBorder(BorderFactory.createEmptyBorder());
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());        
             JScrollBar xBar = scrollPane.getHorizontalScrollBar(), yBar = scrollPane.getVerticalScrollBar();
             xBar.setBorder(BorderFactory.createEmptyBorder());
             yBar.setBorder(BorderFactory.createEmptyBorder());
@@ -206,19 +208,30 @@ public class Notepad {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 updateActionState();
+                checkEmptyState();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
 
             }
-
             @Override
             public void changedUpdate(DocumentEvent e) {
 
             }
         });
     }
+
+    void checkEmptyState() {
+        if(!textArea.getText().isEmpty())
+            return;
+
+    }
+
+    void toggleMenuItemState(JMenuItem item){
+        item.setEnabled(!item.isEnabled());
+    }
+
     void addListener(AbstractAction a, int index) {
         JMenuItem item = fileMenuItems.get(index);
         item.addActionListener(a);
@@ -229,7 +242,6 @@ public class Notepad {
         item.addActionListener(a);
         item.setText(editItems[index]);
     }
-
     public boolean isChanged() {
         String then = getSnap();
         String now = getArea().getText();
