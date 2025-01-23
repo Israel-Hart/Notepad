@@ -36,7 +36,7 @@ public class Notepad {
     private ArrayList<JSeparator> separators ;
     private JMenu[] menus;
     private char[] fileShortcuts, editShortcuts;
-    JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem, printItem, exitItem;
+    private JMenuItem newItem, newWindowItem, openItem, saveItem, saveAsItem, printItem, exitItem;
     private ActionListener fileMenuListener;
     private String snap;
     private boolean isSaved;
@@ -124,51 +124,35 @@ public class Notepad {
         pageSetup = new PageSetup(this,"Page Setup");
 
 
-        void assignMenuItem(JMenuItem item, String text, ArrayList<JMenuItem> itemList)
-        {
-            item = new JMenuItem(text);
-            itemList.add(item);
-        }
-
         //Refactor Code Starts
+        /* Style Menu Items */
+
         //File Items
         for(JMenuItem item : fileMenuItems){
-            item.setFont(UI_FONT);
-//            item.setBorder(BorderFactory.createEmptyBorder());
-            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
-            item.setFocusable(false);
+            styleMenuItem(item);
         }
         //Edit Items
         for(JMenuItem item : editMenuItems){
-            item.setFont(UI_FONT);
-//            item.setBorder(BorderFactory.createEmptyBorder());
-            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
-            item.setFocusable(false);
+            styleMenuItem(items);
         }
 
         //Format Items
         for(JMenuItem item : formatMenuItems){
-            item.setFont(UI_FONT);
-//            item.setBorder(BorderFactory.createEmptyBorder());
-            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
-            item.setFocusable(false);
+            styleMenuItem(items);
         }
         //View Items
         for(JMenuItem item : viewMenuItems){
-            item.setFont(UI_FONT);
-//            item.setBorder(BorderFactory.createEmptyBorder());
-            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
-            item.setFocusable(false);
+            styleMenuItem(items);
         }
         //Help Items
         for(JMenuItem item : helpMenuItems){
-            item.setFont(UI_FONT);
-//            item.setBorder(BorderFactory.createEmptyBorder());
-            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
-            item.setFocusable(false);
+            styleMenuItem(items);
         }
 
+        //Refactor Code Ends
+
         //generate menuItems
+        /*
         for (int i = 0; i < fileItems.length; i++) {  // fileMenu
             JMenuItem item = new JMenuItem(fileItems[i]);
             if(i == 5 || i == 7)
@@ -177,7 +161,7 @@ public class Notepad {
                 fileMenu.add(sp);
                 separators.add(sp);
             }
-            item.addActionListener(fileMenuListener);
+//            item.addActionListener(fileMenuListener);
             fileMenuItems.add(item);
             fileMenu.add(item);
             menuItems.add(item);
@@ -214,6 +198,9 @@ public class Notepad {
             helpMenu.add(item);
             menuItems.add(item);
         }
+
+        */
+
         //Menubar
         menuBar.setBorder(BorderFactory.createEmptyBorder());
         menuBar.setBackground(Color.white);
@@ -230,6 +217,7 @@ public class Notepad {
             Dimension size = sp.getSize();
             sp.setSize((int) (size.getWidth() -10), (int) size.getHeight());
         }
+        /*
         //style menuItems
         for (JMenuItem item : menuItems) {
             item.setFont(UI_FONT);
@@ -237,6 +225,8 @@ public class Notepad {
             item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
             item.setFocusable(false);
         }
+
+         */
             textArea.setFont(UI_FONT);
             scrollPane.setPreferredSize(new Dimension(800, 400));
             scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -253,6 +243,43 @@ public class Notepad {
             panel.add(scrollPane);
             window.add(panel);
         }
+        void styleMenuItem(JMenuItem item ) {
+            item.setFont(UI_FONT);
+//            item.setBorder(BorderFactory.createEmptyBorder());
+            item.setBorder(BorderFactory.createEmptyBorder(4,30,4,10));
+            item.setFocusable(false);
+        }
+    void assignMenuItem(JMenuItem item, String text, ArrayList<JMenuItem> itemList)
+    {
+        item = new JMenuItem(text);
+        itemList.add(item);
+    }
+
+    void coupleMenus() {
+        //File Menu
+        assembleMenuItems(fileMenu, fileMenuItems, new int[]{1,7});
+        assembleMenuItems(editMenu, editMenuItems, new int[]{1,5,10});
+        assembleMenuItems(formatMenu, formatMenuItems, null) ;
+        assembleMenuItems(viewMenu, viewMenuItems, null);
+        assembleMenuItems(helpMenu, helpMenuItems, new int[]{3});
+    }
+    void assembleMenuItems(JMenu menu, ArrayList<JMenuItem> list,  int[] posArr) {
+        int idx = 1;
+        for(JMenuItem item : list)
+        {
+            if(!(posArr == null)) { // position isn't empty
+                for(int pos ; posArr)
+                    if(pos == idx) {
+                        JSeparator sp = new JSeparator(SwingConstant.HORIZONTAL);
+                        separators.add(sp);
+                        menu.add(sp);
+                    }
+            }
+            menu.add(item);
+            idx++;
+        }
+    }
+
     void addListeners() {
         addListener(new CreateNewFile(this, fileItems[0]), 0); //new item
         addListener(new CreateNewWindow(this, fileItems[1]), 1); //new swing item
@@ -267,11 +294,11 @@ public class Notepad {
         addListener(new CreateNewFile(this, newFileItem, newFileItem.getText())); //new item
         addListener(new CreateNewWindow(this, newWindowItem), newWindowItem.getText() ); //new swing item
         addListener(new OpenFile(this, openFileItem, openFileItem.getText())); //open item
-        addListener(new SaveFile(this, fileItems[3]), 3); //save item
-        addListener(new SaveFileAs(this, fileItems[4]), 4); //save item as
-        addListener(pageSetup, 5); //page setup item
-        addListener(new PrintFile(this, fileItems[6]), 6); //print item
-        addListener(new Exit(this, fileItems[7]), 7); //exit item
+        addListener(new SaveFile(this, saveFileItem), saveFileItem.getText()); //save item
+        addListener(new SaveFileAs(this, saveFileAsItem), saveFileAsItem.getText()); //save item as
+        addListener(new pageSetup(this, pageSetupItem), pageSetupItem.getText()); //page setup item
+         addListener(new PrintFile(this, printFileItem), printFileitem.getText()); //print item
+        addListener(new Exit(this, exitItem), exitItem.getText()); //exit item
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
